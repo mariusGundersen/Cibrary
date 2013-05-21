@@ -1,9 +1,13 @@
 package cibrary.kontrollere
 import cibrary.domain.Bok
+import cibrary.repository.BokRepository
 
-object BokKontroller {
+class BokKontroller(var bokRepository: BokRepository) {
 
-	def leggTilNyBok(tittel:String, isbn:String):Bok = {
-		new Bok(tittel, isbn);
+
+  def leggTilNyBok(tittel:String, isbn:String):Bok = {
+		val bok = new Bok(tittel, isbn);
+    bokRepository.lagre(bok)
+    return bok
 	}
 }
