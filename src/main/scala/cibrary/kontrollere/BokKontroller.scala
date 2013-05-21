@@ -10,4 +10,9 @@ class BokKontroller(var bokRepository: BokRepository) {
     bokRepository.lagre(bok)
     return bok
 	}
+
+  def hentAlleBoker(): Iterable[Bok] = {
+    bokRepository.hentAlleBoker();
+  }
+
 }

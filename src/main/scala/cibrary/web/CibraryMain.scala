@@ -10,6 +10,6 @@ object CibraryMain extends App {
 
   var plan = new CibraryPlan(bokKontroller)
 
-	unfiltered.jetty.Http(8080).plan(new CibraryPlan(bokKontroller)).run()
+	unfiltered.jetty.Http(8080).plan(plan).run()
 	
 }
