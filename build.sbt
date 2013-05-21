@@ -11,3 +11,5 @@ libraryDependencies += "org.joda" % "joda-convert" % "1.2" withSources()
 libraryDependencies += "net.databinder" % "unfiltered-jetty_2.9.1" % "0.6.5" withSources()
 
 libraryDependencies += "net.databinder" % "unfiltered-filter_2.9.1" % "0.6.5" withSources()
+
+libraryDependencies += "org.scalatest" %% "scalatest" % "1.9.1" % "test"
