@@ -3,3 +3,7 @@
 /project/plugins/target
 /project/plugins/project
 /.classpath
+/project/project
+/.idea
+/.idea_modules
+/.history
