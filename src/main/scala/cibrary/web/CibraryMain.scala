@@ -1,14 +1,19 @@
 package cibrary.web
 
 import cibrary.repository.BokRepository
-import cibrary.kontrollere.BokKontroller
+import cibrary.kontrollere.{EksemplarKontroller, BokKontroller}
+import cibrary.domain.EksemplarDepotet
 
 object CibraryMain extends App {
 
-  var bokRepository = new BokRepository
-  var bokKontroller = new BokKontroller(bokRepository)
+  val bokRepository = new BokRepository
+  val bokKontroller = new BokKontroller(bokRepository)
+
+  val eksemplarDepotet = new EksemplarDepotet
+  val eksemplarKontroller = new EksemplarKontroller(eksemplarDepotet)
+
 	
-  var plan = new CibraryPlan(bokKontroller)
+  val plan = new CibraryPlan(bokKontroller)
 
 	unfiltered.jetty.Http(8080).plan(plan).run()
 	

@@ -1,6 +1,6 @@
 package cibrary.domain
 
-object EksemplarDepotet {
+class EksemplarDepotet {
 
   private var eksemplarer:List[Eksemplar]  = List()
 
