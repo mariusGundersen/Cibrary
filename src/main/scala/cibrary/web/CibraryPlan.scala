@@ -3,9 +3,8 @@ package cibrary.web
 import unfiltered.filter._
 import unfiltered.request._
 import unfiltered.response._
-import cibrary.repository._
 import cibrary.kontrollere._
-import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
+import javax.servlet.http.HttpServletRequest
 import cibrary.domain.Bok
 import cibrary.web.templates.BookTemplate
 
@@ -17,17 +16,16 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
     case GET(Path("/BookTemplate/list")) => hentAlleBoker()
     case req @ POST(Path("/BookTemplate/opprett")) => nyBok(req)
     case GET(Path(Seg("eksemplar" :: "info" :: (isbn:String) :: Nil))) => hentEksemplarInfo(isbn)
-    case GET(Path(Seg("person" :: "hent" :: navn :: Nil))) => PersonKontroller.hentPerson(navn)
-	  case GET(_) => NotFound ~> Html5(<h2>404 - Not Found</h2>)
-    case GET(Path(Seg("person" :: "ny" :: brukernavn :: fornavn :: etternavn :: Nil))) => PersonKontroller.leggTilPerson(brukernavn, fornavn, etternavn)
-    case req @ POST(Path("/bok/opprett")) => nyBok(req)
     case req @ POST(Path("/eksemplar/ny")) => nyttEksemplar(req)
+    case GET(Path(Seg("person" :: "hent" :: navn :: Nil))) => PersonKontroller.hentPerson(navn)
+    case GET(Path(Seg("person" :: "ny" :: brukernavn :: fornavn :: etternavn :: Nil))) => PersonKontroller.leggTilPerson(brukernavn, fornavn, etternavn)
+    case GET(_) => NotFound ~> Html5(<h2>404 - Not Found</h2>)
   }
 
   def hentForside() = {
     Html5(<h1>Cibrary</h1>
       <ul>
-        <li><a href="/bok/list">Alle bøker</a></li>
+        <li><a href="/bok/list">Alle bï¿½ker</a></li>
         <li><a href="/bok/opprett">Ny bok</a></li>
       </ul>
     )
