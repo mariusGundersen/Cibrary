@@ -6,7 +6,7 @@ import scala.collection.immutable.HashMap
 class BokRepository {
 
   def lagre(bok:Bok) {
-    BokRepository.boker ++ Map(bok.isbn -> bok)
+    BokRepository.boker = BokRepository.boker ++ Map(bok.isbn -> bok)
     println("La til BookTemplate med isbn: ", bok.isbn);
   }
 
@@ -22,5 +22,5 @@ class BokRepository {
 }
 
 object BokRepository {
-  val boker: Map[String, Bok] = HashMap()
+  var boker: Map[String, Bok] = HashMap()
 }
