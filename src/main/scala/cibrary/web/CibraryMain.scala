@@ -10,10 +10,10 @@ object CibraryMain extends App {
   val bokKontroller = new BokKontroller(bokRepository)
 
   val eksemplarDepotet = new EksemplarDepotet
-  val eksemplarKontroller = new EksemplarKontroller(eksemplarDepotet)
+  val eksemplarKontroller = new EksemplarKontroller(eksemplarDepotet, bokRepository)
 
 	
-  val plan = new CibraryPlan(bokKontroller)
+  val plan = new CibraryPlan(bokKontroller, eksemplarKontroller)
 
 	unfiltered.jetty.Http(8080).plan(plan).run()
 	

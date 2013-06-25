@@ -3,26 +3,33 @@ package cibrary.web
 import unfiltered.filter._
 import unfiltered.request._
 import unfiltered.response._
-import cibrary.kontrollere.BokKontroller
+import cibrary.kontrollere.{EksemplarKontroller, BokKontroller}
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 import cibrary.domain.Bok
 
-class CibraryPlan(bokKontroller:BokKontroller) extends Plan{
+class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKontroller) extends Plan{
 
 
 	def intent = Intent {
 	  case GET(Path("/")) => Html5(<h1>Cibrary</h1>)
     case GET(Path("/bok/opprett")) => hentNyBokForm()
     case GET(Path("/bok/list")) => hentAlleBoker()
+    case GET(Path("/eksemplar/ny")) => hentNyttEksemplarForm()
 	  case GET(_) => NotFound ~> Html5(<h2>404 - Not Found</h2>)
     case req @ POST(Path("/bok/opprett")) => nyBok(req)
+    case req @ POST(Path("/eksemplar/ny")) => nyttEksemplar(req)
 	}
 
   def nyBok(req : HttpRequest[HttpServletRequest]):Html5 = {
-    var isbn = req.parameterValues("isbn");
-    var tittel = req.parameterValues("tittel");
-    bokKontroller.leggTilNyBok(tittel.head, isbn.head);
+    val isbn = req.parameterValues("isbn")
+    val tittel = req.parameterValues("tittel")
+    bokKontroller.leggTilNyBok(tittel.head, isbn.head)
     Html5(<h2>Bok lagt til</h2>)
+  }
+  def nyttEksemplar(req : HttpRequest[HttpServletRequest]):Html5 = {
+    val isbn = req.parameterValues("isbn")
+    eksemplarKontroller.leggTilNyttEksemplar(isbn.head)
+    Html5(<h2>Eksemplar lagt til</h2>)
   }
 
   def hentAlleBoker(): Html5 = {
@@ -42,6 +49,18 @@ class CibraryPlan(bokKontroller:BokKontroller) extends Plan{
         <form method="POST">
           Ny bok:
           <input type="text" name="tittel" />
+          <input type="text" name="isbn" />
+          <input type="submit" />
+        </form>
+      </body>
+    </html>)
+  }
+
+  def hentNyttEksemplarForm():Html5 = {
+    Html5(<html>
+      <body>
+        <form method="POST">
+          Nytt eksemplar:
           <input type="text" name="isbn" />
           <input type="submit" />
         </form>
