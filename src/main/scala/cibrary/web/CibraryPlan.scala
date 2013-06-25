@@ -11,14 +11,24 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
 
 
 	def intent = Intent {
-	  case GET(Path("/")) => Html5(<h1>Cibrary</h1>)
+	  case GET(Path("/")) => hentForside()
     case GET(Path("/bok/opprett")) => hentNyBokForm()
     case GET(Path("/bok/list")) => hentAlleBoker()
-    case GET(Path("/eksemplar/ny")) => hentNyttEksemplarForm()
+    case GET(Path(Seg("eksemplar" :: "info" :: (isbn:String) :: Nil))) => hentEksemplarInfo(isbn)
 	  case GET(_) => NotFound ~> Html5(<h2>404 - Not Found</h2>)
     case req @ POST(Path("/bok/opprett")) => nyBok(req)
     case req @ POST(Path("/eksemplar/ny")) => nyttEksemplar(req)
 	}
+
+  def hentForside() = {
+    Html5(<h1>Cibrary</h1>
+      <ul>
+        <li><a href="/bok/list">Alle bøker</a></li>
+        <li><a href="/bok/opprett">Ny bok</a></li>
+      </ul>
+    )
+  }
+
 
   def nyBok(req : HttpRequest[HttpServletRequest]):Html5 = {
     val isbn = req.parameterValues("isbn")
@@ -34,13 +44,38 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
 
   def hentAlleBoker(): Html5 = {
     val boker = bokKontroller.hentAlleBoker()
-    var x = ""
-     boker.foreach(bok => x += "<li>Tittel: " + bok.tittel +", ISBN: " + bok.isbn + "</li>")
+
     Html5(<html>
       <ul>
-        {x}
+        {boker.map(bokInfo)}
       </ul>
     </html>)
+  }
+
+  def bokInfo(bok:Bok) ={
+    <li>{bok.tittel} ({bok.isbn}) <a href={"/eksemplar/info/"+bok.isbn}>info</a></li>
+  }
+
+  def hentEksemplarInfo(isbn:String): Html5 = {
+    val bok = bokKontroller.bokRepository.hent(isbn)
+
+    bok match {
+      case Some(bok) => {
+        val boker = eksemplarKontroller.finnEksemplarerAvBok(bok)
+
+        Html5(<html>
+          <h1>{bok.tittel} ({bok.isbn})</h1>
+          <h2>{boker.length} eksemplarer</h2>
+          <form action="/eksemplar/ny" method="post">
+            <input type="hidden" name="isbn" value={bok.isbn}></input>
+            <input type="submit">+</input>
+          </form>
+        </html>)
+      }
+      case _ => {
+        Html5(<h1>Boken finnes ikke</h1>)
+      }
+    }
   }
 
   def hentNyBokForm():Html5 = {
@@ -56,15 +91,4 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
     </html>)
   }
 
-  def hentNyttEksemplarForm():Html5 = {
-    Html5(<html>
-      <body>
-        <form method="POST">
-          Nytt eksemplar:
-          <input type="text" name="isbn" />
-          <input type="submit" />
-        </form>
-      </body>
-    </html>)
-  }
 }

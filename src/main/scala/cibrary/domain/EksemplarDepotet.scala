@@ -8,8 +8,7 @@ class EksemplarDepotet {
     eksemplarer = eksemplarer :+ eksemplar
   }
 
-  def apply(bok:Bok) = {
+  def apply(bok:Bok):List[Eksemplar] = {
     eksemplarer.filter(_.bok == bok)
-
   }
 }

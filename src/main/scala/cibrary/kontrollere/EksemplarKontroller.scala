@@ -10,7 +10,7 @@ class EksemplarKontroller(depotet: EksemplarDepotet, bøker: BokRepository) {
     depotet += eksemplar
   }
 
-  def finnEksemplarerAvBok(bok:Bok){
-
+  def finnEksemplarerAvBok(bok: Bok):List[Eksemplar] = {
+    depotet(bok)
   }
 }
