@@ -6,15 +6,15 @@ import unfiltered.response._
 import cibrary.kontrollere.BokKontroller
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 import cibrary.domain.Bok
-import cibrary.web.templates.boktemplate
+import cibrary.web.templates.BookTemplate
 
 class CibraryPlan(bokKontroller:BokKontroller) extends Plan{
 
 
   def intent = Intent {
-    case GET(Path("/boktemplate/opprett")) => boktemplate.opprettBok()
-    case GET(Path("/boktemplate/list")) => hentAlleBoker()
-    case req @ POST(Path("/boktemplate/opprett")) => nyBok(req)
+    case GET(Path("/BookTemplate/opprett")) => BookTemplate.opprettBok()
+    case GET(Path("/BookTemplate/list")) => hentAlleBoker()
+    case req @ POST(Path("/BookTemplate/opprett")) => nyBok(req)
   }
 
   def nyBok(req : HttpRequest[HttpServletRequest]):Html5 = {

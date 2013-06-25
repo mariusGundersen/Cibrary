@@ -2,7 +2,7 @@ package cibrary.web.templates
 
 import unfiltered.response.Html5
 
-object boktemplate {
+object BookTemplate {
     def opprettBok() : Html5 = {
       Html5(
         <html>
@@ -35,13 +35,6 @@ object boktemplate {
           </div>
         </body>
       </html>
-
-
-
-
-
-
-
       )
-    }
+  }
 }
