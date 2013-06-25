@@ -2,6 +2,7 @@ package cibrary.web
 
 import cibrary.repository.BokRepository
 import cibrary.kontrollere.BokKontroller
+import java.io.File
 
 object CibraryMain extends App {
 
@@ -10,6 +11,6 @@ object CibraryMain extends App {
 
   var plan = new CibraryPlan(bokKontroller)
 
-	unfiltered.jetty.Http(8080).plan(plan).run()
+	unfiltered.jetty.Http(8080).resources(new File("src/main/webapp").toURI().toURL()).plan(plan).run()
 	
 }

@@ -7,12 +7,12 @@ class BokRepository {
 
   def lagre(bok:Bok) {
     BokRepository.boker ++ Map(bok.isbn -> bok)
-    println("La til bok med isbn: ", bok.isbn);
+    println("La til boktemplate med isbn: ", bok.isbn);
   }
 
   def hent(isbn:String):Option[Bok] =  {
     val bok: Option[Bok] = BokRepository.boker.get(isbn)
-    println("Hentet bok: ", bok.toString)
+    println("Hentet boktemplate: ", bok.toString)
     return bok
   }
 
