@@ -2,6 +2,7 @@ package cibrary.repository
 
 import org.scalatest.FunSpec
 import cibrary.kontrollere.PersonKontroller
+import unfiltered.response.Html5
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,8 +15,8 @@ class PersonKontrollerTest extends FunSpec {
   describe("A PersonKontroller") {
     it("Should add person to repository") {
       PersonKontroller.leggTilPerson("OyvVol", "Øyvind", "Volden")
-      val navn:String = PersonKontroller.hentPerson("OyvVol");
-      assert(navn.equals("Øyvind Volden"));
+      val navn:Html5 = PersonKontroller.hentPerson("OyvVol");
+      assert(navn.toString() === (Html5(<h2>Øyvind Volden</h2>).toString()))
     }
   }
 }
