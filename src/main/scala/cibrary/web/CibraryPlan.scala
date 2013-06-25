@@ -12,9 +12,9 @@ class CibraryPlan(bokKontroller:BokKontroller) extends Plan{
 
 
   def intent = Intent {
-    case GET(Path("/BookTemplate/opprett")) => BookTemplate.opprettBok()
-    case GET(Path("/BookTemplate/list")) => hentAlleBoker()
-    case req @ POST(Path("/BookTemplate/opprett")) => nyBok(req)
+    case GET(Path("/bok/opprett")) => BookTemplate.opprettBok()
+    case GET(Path("/bok/list")) => hentAlleBoker()
+    case req @ POST(Path("/bok/opprett")) => nyBok(req)
   }
 
   def nyBok(req : HttpRequest[HttpServletRequest]):Html5 = {
@@ -26,8 +26,9 @@ class CibraryPlan(bokKontroller:BokKontroller) extends Plan{
 
   def hentAlleBoker(): Html5 = {
     val boker = bokKontroller.hentAlleBoker()
+
     var x = ""
-     boker.foreach(bok => x += "<li>Tittel: " + bok.tittel +", ISBN: " + bok.isbn + "</li>")
+    boker.foreach(bok => x += "<li>Tittel: " + bok.tittel +", ISBN: " + bok.isbn + "</li>")
     Html5(<html>
       <ul>
         {x}

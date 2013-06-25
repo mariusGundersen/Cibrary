@@ -27,7 +27,7 @@ object BookTemplate {
                   </div>
                   <div class="control-group">
                     <div class="controls">
-                      <button type="submit" class="btn">Lagre</button>
+                      <input type="submit" class="btn" value="Lagre"/>
                     </div>
                   </div>
                 </form>
