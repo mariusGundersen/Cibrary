@@ -1,18 +1,15 @@
 package cibrary.domain
 
-import scala.collection.mutable.MutableList
-
-
 object EksemplarDepotet {
 
-  private var bøker:List[Eksemplar]  = List()
+  private var eksemplarer:List[Eksemplar]  = List()
 
   def +=(eksemplar:Eksemplar){
-    bøker = bøker :+ eksemplar
+    eksemplarer = eksemplarer :+ eksemplar
   }
 
   def apply(bok:Bok) = {
-    bøker.filter(_.bok == bok)
+    eksemplarer.filter(_.bok == bok)
 
   }
 }
