@@ -1,5 +1,8 @@
 package cibrary.repository
 
+import org.scalatest.FunSpec
+import cibrary.kontrollere.PersonKontroller
+
 /**
  * Created with IntelliJ IDEA.
  * User: oyvvol
@@ -7,6 +10,12 @@ package cibrary.repository
  * Time: 13:54
  * To change this template use File | Settings | File Templates.
  */
-class PersonKontrollerTest {
-
+class PersonKontrollerTest extends FunSpec {
+  describe("A PersonKontroller") {
+    it("Should add person to repository") {
+      PersonKontroller.leggTilPerson("OyvVol", "Øyvind", "Volden")
+      val navn:String = PersonKontroller.hentPerson("OyvVol");
+      assert(navn.equals("Øyvind Volden"));
+    }
+  }
 }
