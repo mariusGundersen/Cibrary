@@ -5,33 +5,37 @@ import unfiltered.request._
 import unfiltered.response._
 import cibrary.repository.PersonRepository
 import cibrary.kontrollere.{PersonKontroller, BokKontroller}
+import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
+import cibrary.domain.Bok
+import cibrary.web.templates.BookTemplate
 
 class CibraryPlan(bokKontroller:BokKontroller) extends Plan{
 
 	def intent = Intent {
-	  case GET(Path("/")) => hentNyBokForm()
-	  case GET(Path(Seg("bok" :: "ny" :: navn :: Nil))) => Html5(<h2>{navn}</h2>)
+    case GET(Path("/BookTemplate/opprett")) => BookTemplate.opprettBok()
+    case GET(Path("/BookTemplate/list")) => hentAlleBoker()
+    case req @ POST(Path("/BookTemplate/opprett")) => nyBok(req)
     case GET(Path(Seg("person" :: "hent" :: navn :: Nil))) => PersonKontroller.hentPerson(navn)
     case GET(Path(Seg("person" :: "ny" :: brukernavn :: fornavn :: etternavn :: Nil))) => PersonKontroller.leggTilPerson(brukernavn, fornavn, etternavn)
-	  case GET(_) => NotFound ~> Html5(<h2>404 - Not Found</h2>)
-    case POST(Path(Seg("bok" :: "opprett" :: navn :: Nil))) => Html5(<h2>{navn}</h2>)
   }
 
-  def nyBok(tittel:String, isbn:String):Html5 = {
-    bokKontroller.leggTilNyBok(tittel, isbn)
-    Html5(<h2>isbn</h2>)
+  def nyBok(req : HttpRequest[HttpServletRequest]):Html5 = {
+    var isbn = req.parameterValues("isbn");
+    var tittel = req.parameterValues("tittel");
+    bokKontroller.leggTilNyBok(tittel.head, isbn.head);
+    Html5(<h2>Bok lagt til</h2>)
   }
 
-  def hentNyBokForm():Html5 = {
+  def hentAlleBoker(): Html5 = {
+    val boker = bokKontroller.hentAlleBoker()
+    var x = ""
+     boker.foreach(bok => x += "<li>Tittel: " + bok.tittel +", ISBN: " + bok.isbn + "</li>")
     Html5(<html>
-      <body>
-        <form method="POST">
-          Ny bok:
-          <input type="text" name="tittel" />
-          <input type="text" name="isbn" />
-          <input type="submit" />
-        </form>
-      </body>
+      <ul>
+        {x}
+      </ul>
     </html>)
   }
+
+
 }
