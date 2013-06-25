@@ -7,7 +7,7 @@ object BookTemplate {
       Html5(
         <html>
         <head>
-          <link rel="stylesheet" href="/css/bootstrap.min.css" />
+          <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
         </head>
         <body>
           <div class="container">
