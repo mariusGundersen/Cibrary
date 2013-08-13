@@ -19,7 +19,44 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
     case GET(Path("/person/list")) => hentAllePersoner()
     case GET(Path("/person/opprett")) => PersonTemplate.opprettPerson()
     case req @ POST (Path("/person/opprett")) => nyPerson(req)
-    case GET(Path("/")) => hentForside()
+    case GET(Path("/")) => hentLoggInnSide()//hentForside()
+    case req @ POST (Path("/")) => loggInn(req)
+  }
+
+  def loggInn(req: HttpRequest[HttpServletRequest]) :Html5 = {
+    val epost = req.parameterValues("epost")
+    val passord = req.parameterValues("passord")
+    val loggaInn = PersonKontroller.finnPerson(epost.head, passord.head)
+    loggaInn match {
+      case Some(status) =>
+      case _ => Html5(<h2>Innlogging mislyktes.</h2>)
+    }
+
+  }
+
+  def hentLoggInnSide() = {
+    BookTemplate.pønt(
+      <h1>Logg Inn</h1>
+      <form method="POST" class="form-horizontal">
+        <div class="control-group">
+          <label class="control-label" for="brukernavn">Epostadresse</label>
+          <div class="controls">
+            <input type="text" name="brukernavn" id="brukernavn" placeholder="Epostadresse"/>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="passord">Løsningsord</label>
+          <div class="controls">
+            <input type="text" name="passord" id="passord" placeholder="Løsningsord"/>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <input type="submit" class="btn" value="Logge seg inn"/>
+          </div>
+        </div>
+      </form>
+    )
   }
 
   def hentForside() = {
@@ -59,11 +96,11 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
 
   def hentAlleBoker(): Html5 = {
     val boker = bokKontroller.hentAlleBoker()
-    BookTemplate.pønt(<html>
+    BookTemplate.pønt(
       <ul>
         {boker.map(bokInfo)}
       </ul>
-    </html>, 1)
+      , 1)
   }
 
   def bokInfo(bok:Bok) = {
