@@ -26,8 +26,7 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
       <ul>
         <li><a href="/bok/list">Alle bøker</a></li>
         <li><a href="/bok/opprett">Ny bok</a></li>
-      </ul>
-    )
+      </ul>, 0)
   }
 
   def nyBok(req : HttpRequest[HttpServletRequest]):Html5 = {
