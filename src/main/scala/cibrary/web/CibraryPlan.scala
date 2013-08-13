@@ -14,7 +14,7 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
     case GET(Path("/bok/opprett")) => BookTemplate.opprettBok()
     case GET(Path("/bok/list")) => hentAlleBoker()
     case req @ POST(Path("/bok/opprett")) => nyBok(req)
-    case GET(Path(Seg("eksemplar" :: "info" :: (isbn:String) :: Nil))) => hentEksemplarInfo(isbn)
+    case GET(Path(Seg("bok" :: (isbn:String) :: Nil))) => hentBokInfo(isbn)
     case req @ POST(Path("/eksemplar/ny")) => nyttEksemplar(req)
     case GET(Path("/person/list")) => hentAllePersoner()
     case GET(Path("/person/opprett")) => PersonTemplate.opprettPerson()
@@ -67,21 +67,26 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
   }
 
   def bokInfo(bok:Bok) = {
-    <li>{bok.tittel} ({bok.isbn}) <a href={"/eksemplar/info/"+bok.isbn}>info</a></li>
+    <li>{bok.tittel} ({bok.isbn}) <a href={"/bok/"+bok.isbn}>info</a></li>
   }
 
-  def hentEksemplarInfo(isbn:String): Html5 = {
+  def hentBokInfo(isbn:String): Html5 = {
     val bok = bokKontroller.bokRepository.hent(isbn)
 
     bok match {
       case Some(bok) => {
         val boker = eksemplarKontroller.finnEksemplarerAvBok(bok)
 
-        BookTemplate.pønt(<h1>{bok.tittel} ({bok.isbn})</h1>
+        BookTemplate.pønt(
+          <h1>{bok.tittel} ({bok.isbn})</h1>
           <h2>{boker.length} eksemplarer</h2>
           <form action="/eksemplar/ny" method="post">
             <input type="hidden" name="isbn" value={bok.isbn}></input>
             <input type="submit" value="+" />
+          </form>
+          <form action="/utlaan/opprett" method="post">
+            <input type="hidden" name="isbn" value={bok.isbn}></input>
+            <input type="submit" value="Lån bok" />
           </form>)
       }
       case _ => {
