@@ -1,8 +1,9 @@
 package cibrary.kontrollere
 
 import cibrary.repository.PersonRepository
-import cibrary.domain.Person
+import cibrary.domain.{Bok, Person}
 import unfiltered.response.Html5
+import scala.collection.{immutable, mutable}
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,5 +30,19 @@ object PersonKontroller {
     } else {
       return Html5(<h2>Person ikke funnet.</h2>)
     }
+  }
+
+  def hentAllePersoner():Html5 = {
+    val allePersoner:Map[String, Person] = PersonRepository.all();
+    Html5(
+      <ul>
+        {allePersoner.values.map(personInfo)}
+      </ul>
+    )
+
+  }
+
+  def personInfo(person:Person) = {
+    <li>{person.brukernavn}: {person.etternavn}, {person.fornavn}</li>
   }
 }

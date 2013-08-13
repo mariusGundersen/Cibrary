@@ -16,8 +16,7 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
     case req @ POST(Path("/bok/opprett")) => nyBok(req)
     case GET(Path(Seg("eksemplar" :: "info" :: (isbn:String) :: Nil))) => hentEksemplarInfo(isbn)
     case req @ POST(Path("/eksemplar/ny")) => nyttEksemplar(req)
-    case GET(Path(Seg("person" :: "hent" :: navn :: Nil))) => PersonKontroller.hentPerson(navn)
-    //case GET(Path(Seg("person" :: "opprett2" :: brukernavn :: fornavn :: etternavn :: Nil))) => PersonKontroller.leggTilPerson(brukernavn, fornavn, etternavn)
+    case GET(Path("/person/list")) => hentAllePersoner()
     case GET(Path("/person/opprett")) => PersonTemplate.opprettPerson()
     case req @ POST (Path("/person/opprett")) => nyPerson(req)
     case GET(Path("/")) => hentForside()
@@ -28,6 +27,7 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
       <ul>
         <li><a href="/bok/list">Alle bøker</a></li>
         <li><a href="/bok/opprett">Ny bok</a></li>
+        <li><a href="/person/list">Alle personer</a></li>
         <li><a href="/person/opprett">Ny person</a></li>
       </ul>, 0)
   }
@@ -51,6 +51,10 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
     val etternavn = req.parameterValues("etternavn")
     PersonKontroller.leggTilPerson(brukernavn.head, fornavn.head, etternavn.head)
     Html5(<h2>Person lagt til</h2>)
+  }
+
+  def hentAllePersoner():Html5 = {
+    PersonKontroller.hentAllePersoner();
   }
 
   def hentAlleBoker(): Html5 = {

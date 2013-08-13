@@ -1,7 +1,7 @@
 package cibrary.repository
 
 import cibrary.domain.Person
-import scala.collection.mutable.Map
+import scala.collection.immutable.{HashMap, Map}
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +11,7 @@ import scala.collection.mutable.Map
  * To change this template use File | Settings | File Templates.
  */
 object PersonRepository {
-  val personMap: Map[String, Person] = Map()
+  var personMap: Map[String, Person] = HashMap()
 
   def findByBrukernavn(brukernavn: String): Option[Person] = {
     personMap.get(brukernavn)
@@ -19,9 +19,13 @@ object PersonRepository {
 
   def save(person: Person): Person = {
     if (person != null) {
-      personMap(person.brukernavn) = person
+      personMap = personMap ++ Map(person.brukernavn -> person)
       return person
     }
     throw new NullPointerException
+  }
+
+  def all():Map[String, Person] = {
+    return personMap
   }
 }
