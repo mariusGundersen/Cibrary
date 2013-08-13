@@ -19,19 +19,19 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
     case GET(Path("/person/list")) => hentAllePersoner()
     case GET(Path("/person/opprett")) => PersonTemplate.opprettPerson()
     case req @ POST (Path("/person/opprett")) => nyPerson(req)
-    case GET(Path("/")) => hentLoggInnSide()//hentForside()
+    case GET(Path("/")) => hentForside()
     case req @ POST (Path("/")) => loggInn(req)
   }
 
   def loggInn(req: HttpRequest[HttpServletRequest]) :Html5 = {
     val epost = req.parameterValues("epost")
     val passord = req.parameterValues("passord")
-    val loggaInn = PersonKontroller.finnPerson(epost.head, passord.head)
-    loggaInn match {
-      case Some(status) =>
-      case _ => Html5(<h2>Innlogging mislyktes.</h2>)
-    }
-
+    val loggaInn = PersonKontroller.finnPersonVedBrukernavnOgPassord(epost.head, passord.head)
+    //loggaInn match {
+      //case Some(status) =>
+      //case _ =>   Html5(<h2>Innlogging mislyktes.</h2>)
+    //}
+    Html5(<h2>To be conbstructed.</h2>)
   }
 
   def hentLoggInnSide() = {
@@ -84,14 +84,15 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
 
   def nyPerson(req : HttpRequest[HttpServletRequest]):Html5 = {
     val brukernavn = req.parameterValues("brukernavn")
+    val passord = req.parameterValues("passord")
     val fornavn = req.parameterValues("fornavn")
     val etternavn = req.parameterValues("etternavn")
-    PersonKontroller.leggTilPerson(brukernavn.head, fornavn.head, etternavn.head)
+    PersonKontroller.leggTilPerson(brukernavn.head, passord.head, fornavn.head, etternavn.head)
     Html5(<h2>Person lagt til</h2>)
   }
 
   def hentAllePersoner():Html5 = {
-    PersonKontroller.hentAllePersoner();
+    PersonKontroller.hentAllePersoner()
   }
 
   def hentAlleBoker(): Html5 = {

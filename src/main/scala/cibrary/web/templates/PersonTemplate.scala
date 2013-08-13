@@ -26,6 +26,12 @@ object PersonTemplate {
                   </div>
                 </div>
                 <div class="control-group">
+                  <label class="control-label" for="passord">Løsningsord</label>
+                  <div class="controls">
+                    <input type="text" name="passord" id="passord" placeholder="Løsningsord"/>
+                  </div>
+                </div>
+                <div class="control-group">
                   <label class="control-label" for="fornavn">Fornavn</label>
                   <div class="controls">
                     <input type="text" name="fornavn" id="fornavn" placeholder="Fornavn (Ola)"/>
