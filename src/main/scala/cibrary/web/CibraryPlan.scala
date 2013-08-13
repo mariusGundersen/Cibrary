@@ -6,7 +6,7 @@ import unfiltered.response._
 import cibrary.kontrollere._
 import javax.servlet.http.HttpServletRequest
 import cibrary.domain.Bok
-import cibrary.web.templates.BookTemplate
+import cibrary.web.templates.{PersonTemplate, BookTemplate}
 
 class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKontroller) extends Plan{
 
@@ -17,7 +17,9 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
     case GET(Path(Seg("eksemplar" :: "info" :: (isbn:String) :: Nil))) => hentEksemplarInfo(isbn)
     case req @ POST(Path("/eksemplar/ny")) => nyttEksemplar(req)
     case GET(Path(Seg("person" :: "hent" :: navn :: Nil))) => PersonKontroller.hentPerson(navn)
-    case GET(Path(Seg("person" :: "ny" :: brukernavn :: fornavn :: etternavn :: Nil))) => PersonKontroller.leggTilPerson(brukernavn, fornavn, etternavn)
+    //case GET(Path(Seg("person" :: "opprett2" :: brukernavn :: fornavn :: etternavn :: Nil))) => PersonKontroller.leggTilPerson(brukernavn, fornavn, etternavn)
+    case GET(Path("/person/opprett")) => PersonTemplate.opprettPerson()
+    case req @ POST (Path("/person/opprett")) => nyPerson(req)
     case GET(Path("/")) => hentForside()
   }
 
@@ -26,6 +28,7 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
       <ul>
         <li><a href="/bok/list">Alle bøker</a></li>
         <li><a href="/bok/opprett">Ny bok</a></li>
+        <li><a href="/person/opprett">Ny person</a></li>
       </ul>
     )
   }
@@ -41,6 +44,14 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
     val isbn = req.parameterValues("isbn")
     eksemplarKontroller.leggTilNyttEksemplar(isbn.head)
     Html5(<h2>Eksemplar lagt til</h2>)
+  }
+
+  def nyPerson(req : HttpRequest[HttpServletRequest]):Html5 = {
+    val brukernavn = req.parameterValues("brukernavn")
+    val fornavn = req.parameterValues("fornavn")
+    val etternavn = req.parameterValues("etternavn")
+    PersonKontroller.leggTilPerson(brukernavn.head, fornavn.head, etternavn.head)
+    Html5(<h2>Person lagt til</h2>)
   }
 
   def hentAlleBoker(): Html5 = {
