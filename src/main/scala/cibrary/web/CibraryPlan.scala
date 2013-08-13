@@ -34,7 +34,7 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
     val isbn = req.parameterValues("isbn")
     val tittel = req.parameterValues("tittel")
     bokKontroller.leggTilNyBok(tittel.head, isbn.head)
-    BookTemplate.pønt(<h2>Bok lagt til</h2>)
+    BookTemplate.pønt(<h2>Bok lagt til</h2>, 2)
   }
 
   def nyttEksemplar(req : HttpRequest[HttpServletRequest]):Html5 = {
@@ -49,7 +49,7 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
       <ul>
         {boker.map(bokInfo)}
       </ul>
-    </html>)
+    </html>, 1)
   }
 
   def bokInfo(bok:Bok) = {
