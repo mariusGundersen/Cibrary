@@ -3,7 +3,8 @@ package cibrary.repository
 import cibrary.domain.Bok
 import scala.collection.immutable.HashMap
 
-class BokRepository {
+object BokRepository {
+  var boker: Map[String, Bok] = HashMap()
 
   def lagre(bok:Bok) {
     BokRepository.boker = BokRepository.boker ++ Map(bok.isbn -> bok)
@@ -19,8 +20,4 @@ class BokRepository {
   def hentAlleBoker(): Iterable[Bok] = {
     BokRepository.boker.values
   }
-}
-
-object BokRepository {
-  var boker: Map[String, Bok] = HashMap()
 }
