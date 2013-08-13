@@ -4,7 +4,6 @@ import cibrary.repository.BokRepository
 
 class BokKontroller(var bokRepository: BokRepository) {
 
-
   def leggTilNyBok(tittel:String, isbn:String):Bok = {
 		val bok = new Bok(tittel, isbn);
     bokRepository.lagre(bok)
