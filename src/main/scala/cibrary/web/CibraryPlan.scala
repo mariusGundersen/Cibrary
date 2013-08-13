@@ -22,7 +22,7 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
   }
 
   def hentForside() = {
-    Html5(<h1>Cibrary</h1>
+    BookTemplate.pønt(<h1>Cibrary</h1>
       <ul>
         <li><a href="/bok/list">Alle bøker</a></li>
         <li><a href="/bok/opprett">Ny bok</a></li>
@@ -34,25 +34,25 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
     val isbn = req.parameterValues("isbn")
     val tittel = req.parameterValues("tittel")
     bokKontroller.leggTilNyBok(tittel.head, isbn.head)
-    Html5(<h2>Bok lagt til</h2>)
+    BookTemplate.pønt(<h2>Bok lagt til</h2>)
   }
 
   def nyttEksemplar(req : HttpRequest[HttpServletRequest]):Html5 = {
     val isbn = req.parameterValues("isbn")
     eksemplarKontroller.leggTilNyttEksemplar(isbn.head)
-    Html5(<h2>Eksemplar lagt til</h2>)
+    BookTemplate.pønt(<h2>Eksemplar lagt til</h2>)
   }
 
   def hentAlleBoker(): Html5 = {
     val boker = bokKontroller.hentAlleBoker()
-    Html5(<html>
+    BookTemplate.pønt(<html>
       <ul>
         {boker.map(bokInfo)}
       </ul>
     </html>)
   }
 
-  def bokInfo(bok:Bok) ={
+  def bokInfo(bok:Bok) = {
     <li>{bok.tittel} ({bok.isbn}) <a href={"/eksemplar/info/"+bok.isbn}>info</a></li>
   }
 
@@ -63,17 +63,15 @@ class CibraryPlan(bokKontroller:BokKontroller, eksemplarKontroller: EksemplarKon
       case Some(bok) => {
         val boker = eksemplarKontroller.finnEksemplarerAvBok(bok)
 
-        Html5(<html>
-          <h1>{bok.tittel} ({bok.isbn})</h1>
+        BookTemplate.pønt(<h1>{bok.tittel} ({bok.isbn})</h1>
           <h2>{boker.length} eksemplarer</h2>
           <form action="/eksemplar/ny" method="post">
             <input type="hidden" name="isbn" value={bok.isbn}></input>
-            <input type="submit">+</input>
-          </form>
-        </html>)
+            <input type="submit" value="+" />
+          </form>)
       }
       case _ => {
-        Html5(<h1>Boken finnes ikke</h1>)
+        BookTemplate.pønt(<h1>Boken finnes ikke</h1>)
       }
     }
   }
